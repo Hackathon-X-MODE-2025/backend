@@ -1,0 +1,41 @@
+auth:
+  base-url: ${AIRFLOW_BASEURL:https://air-hack.bigtows.org}
+  token-uri: /auth/token
+  username: ${AIRFLOW_USER}
+  password: ${AIRFLOW_PASSWORD}
+
+spring:
+  application:
+    name: airflow-adapter
+  datasource:
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    url: ${DATABASE_HOST_JDBC:jdbc:postgresql://localhost:5432}/${spring.application.name}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:/db/master.xml
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: validate
+grpc:
+  server:
+    port: ${SERVER_GRPC_PORT:9004}
+    keep-alive-time: 30s
+    keep-alive-timeout: 5s
+    permit-keep-alive-without-calls: true
+server:
+  port: ${SERVER_HTTP_PORT:8004}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+  api-docs:
+    path: /api-docs
+zendal:
+  security:
+    anonymous-requests:
+      - method: GET
+        pattern: "/web/api/debug/**"

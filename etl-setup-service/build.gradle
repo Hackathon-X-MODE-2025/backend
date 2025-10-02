@@ -1,0 +1,20 @@
+plugins {
+    id 'idea'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'dev.zendal.zendal-dependency' version '0.0.1'
+    id 'org.cyclonedx.bom' version '1.8.0' apply(false)
+}
+
+group = 'dev.zendal.backend'
+
+subprojects {
+    apply {
+        plugin 'idea'
+        plugin 'io.spring.dependency-management'
+        plugin 'dev.zendal.zendal-dependency'
+        plugin 'org.cyclonedx.bom'
+    }
+    group = 'dev.zendal.backend'
+}
+
+version = project(":etl-setup-service").version

@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url "https://" + (System.getenv('CI_SERVER_HOST') ?: "gitlab.zendal.dev") + "/api/v4/projects/287/packages/maven"
+            name "Zendal GitLab"
+        }
+    }
+}
+
+rootProject.name = 'Source Batch Service'
+
+
+include 'source-batch-service'

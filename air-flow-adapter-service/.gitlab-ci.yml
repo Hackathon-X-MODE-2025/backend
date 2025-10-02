@@ -1,0 +1,4 @@
+include:
+  - project: 'devops/ci-cd'
+    ref: main
+    file: '/action/spring/application.yml'

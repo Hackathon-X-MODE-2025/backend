@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="001" author="alexander (bigtows) chapchuk">
+        <createTable tableName="etl_session">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="status" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="expected_size_in_gb" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="scheduler_rate" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="update_rate" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="data_base_prediction" type="jsonb"/>
+            <column name="data_source_settings" type="jsonb"/>
+
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="etl_session_source">
+            <column name="etl_session_id" type="uuid">
+                <constraints primaryKey="true" referencedTableName="etl_session" referencedColumnNames="id"
+                             foreignKeyName="etl_session_id_fk"/>
+            </column>
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="type" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scheme" type="varchar"/>
+
+            <column name="context" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="002" author="alexander (bigtows) chapchuk">
+        <createTable tableName="etl_session_chat">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="etl_session_id" type="uuid">
+                <constraints referencedTableName="etl_session" referencedColumnNames="id"
+                             foreignKeyName="etl_session_id_fk"/>
+            </column>
+            <column name="ddl" type="jsonb"/>
+            <column name="dag" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pipeline_visualization" type="jsonb"/>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createSequence sequenceName="etl_session_chat_id_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet id="003" author="alexander (bigtows) chapchuk">
+        <addColumn tableName="etl_session">
+            <column name="airflow_id" type="uuid"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
