@@ -66,7 +66,10 @@ public class CodeGeneratorServiceImpl implements CodeGeneratorService {
                                                                 .settings(v.getContext())
                                                                 .build();
                                                     } catch (JsonProcessingException e) {
-                                                        throw new RuntimeException(e);
+                                                       return CodeGeneratorSchema.CodeGeneratorSchemaSettings.builder()
+                                                               .schema(v.getScheme())
+                                                               .settings(v.getContext())
+                                                               .build();
                                                     }
                                                 }
                                         ).toList()
