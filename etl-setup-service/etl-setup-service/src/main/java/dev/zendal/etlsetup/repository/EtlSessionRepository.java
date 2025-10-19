@@ -3,6 +3,8 @@ package dev.zendal.etlsetup.repository;
 import dev.zendal.etlsetup.domain.EtlSessionEntity;
 import dev.zendal.etlsetup.domain.EtlSessionStatus;
 import jakarta.persistence.LockModeType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 
@@ -15,4 +17,7 @@ public interface EtlSessionRepository extends JpaRepository<EtlSessionEntity, UU
     Optional<EtlSessionEntity> getOneById(UUID id);
 
     Optional<EtlSessionEntity> findTop1ByStatus(EtlSessionStatus status);
+
+
+    Page<EtlSessionEntity> findAllByUser_Id(UUID userId, Pageable pageable);
 }

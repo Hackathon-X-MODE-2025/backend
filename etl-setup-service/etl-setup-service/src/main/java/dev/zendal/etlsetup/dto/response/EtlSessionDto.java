@@ -23,4 +23,7 @@ public class EtlSessionDto {
 
 
     private LocalDateTime createdDate;
+
+    private Integer process;
+
 }

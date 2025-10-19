@@ -48,7 +48,7 @@ public class EtlSessionTickerServiceImpl implements EtlSessionTickerService {
                 .build();
 
 
-        etlSessionEntity.setDataBasePrediction(this.dataBasePredictionClient.predict(request));
+        etlSessionEntity.setDataBasePrediction(this.dataBasePredictionClient.predict(etlSessionEntity.getId(),request));
 
         this.etlSessionStatusService.change(etlSessionEntity.getId(), EtlSessionStatus.USER_CHOOSE_DATABASE);
     }

@@ -1,12 +1,14 @@
 package dev.zendal.etlsetup.clinet;
 
 import dev.zendal.etlsetup.dto.codegenerator.*;
+import dev.zendal.etlsetup.service.session.SessionProcessService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -15,8 +17,10 @@ public class CodeGeneratorClientImpl implements CodeGeneratorClient {
 
     private final WebClient codeGeneratorWebClient;
 
+    private final SessionProcessService sessionProcessService;
+
     @Override
-    public CodeGeneratorResponse generateCode(CodeGeneratorRequest codeGeneratorRequest) {
+    public CodeGeneratorResponse generateCode(UUID id, CodeGeneratorRequest codeGeneratorRequest) {
         final var job = this.codeGeneratorWebClient.post()
                 .uri(uriBuilder -> uriBuilder.path("/orchestrate").build())
                 .bodyValue(codeGeneratorRequest)
@@ -24,6 +28,9 @@ public class CodeGeneratorClientImpl implements CodeGeneratorClient {
                 .bodyToMono(CodeGeneratorJobResponse.class)
                 .block().getJobId();
 
+
+        var process = 20;
+     //   this.sessionProcessService.set(id, process);
 
         log.info("Job id: {}", job);
         PipelineResponse pipeline;
@@ -38,6 +45,9 @@ public class CodeGeneratorClientImpl implements CodeGeneratorClient {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            process += 1;
+            process = Math.min(75, process);
+           // this.sessionProcessService.set(id, process);
         } while ("processing".equalsIgnoreCase(Optional.ofNullable(pipeline.getStatus()).orElse("")));
 
         return CodeGeneratorResponse.builder()

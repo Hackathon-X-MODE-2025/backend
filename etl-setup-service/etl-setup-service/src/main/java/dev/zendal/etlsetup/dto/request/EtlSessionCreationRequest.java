@@ -9,10 +9,14 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Accessors(chain = true)
 public class EtlSessionCreationRequest {
+
+    @NotNull
+    private UUID userId;
 
     @NotEmpty
     private List<? extends SourceSettings> sourceSettings;

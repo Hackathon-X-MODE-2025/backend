@@ -40,8 +40,8 @@ public class EtlSessionChatRestController {
     }
 
     @PatchMapping
-    public void patch(@PathVariable UUID sessionId, @RequestBody EtlSessionChatPatchRequest dto) {
-        this.etlSessionPatchService.edit(sessionId, dto);
+    public EtlSessionChatDto patch(@PathVariable UUID sessionId, @RequestBody EtlSessionChatPatchRequest dto) {
+       return this.etlSessionPatchService.edit(sessionId, dto);
     }
 
 }

@@ -84,4 +84,28 @@
             <column name="airflow_id" type="uuid"/>
         </addColumn>
     </changeSet>
+    <changeSet id="004" author="alexander (bigtows) chapchuk">
+        <createTable tableName="user">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(50)">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="varchar(900)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addColumn tableName="etl_session">
+            <column name="user_id" type="uuid">
+                <constraints referencedTableName="user" referencedColumnNames="id" nullable="false" foreignKeyName="user_id_fk"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="005" author="alexander (bigtows) chapchuk">
+        <addColumn tableName="etl_session">
+            <column name="process" type="int"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

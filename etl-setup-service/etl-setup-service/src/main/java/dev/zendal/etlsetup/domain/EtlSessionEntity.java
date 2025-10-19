@@ -61,6 +61,9 @@ public class EtlSessionEntity {
     @Column(name = "airflow_id")
     private UUID airflowId;
 
+    @Column(name = "process")
+    private Integer process;
+
     @NotNull
     @Column(name = "created_date", nullable = false, updatable = false)
     @CreatedDate
@@ -76,6 +79,11 @@ public class EtlSessionEntity {
 
     @OneToMany(mappedBy = "etlSession", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EtlSessionChatEntity> chats = new LinkedHashSet<>();
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
 
     public EtlSessionEntity addAll(Collection<EtlSessionSourceEntity> files) {

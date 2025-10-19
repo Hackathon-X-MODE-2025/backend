@@ -37,5 +37,14 @@ public class EtlSessionStatusServiceImpl implements EtlSessionStatusService {
         log.info("Changing status of session {} to {} at {}", session.getStatus(), newStatus, sessionId);
         //TODO Changing from to
         session.setStatus(newStatus);
+        if (newStatus == EtlSessionStatus.ANALYZING){
+            session.setProcess(0);
+        }
+        if (newStatus == EtlSessionStatus.AI_DATABASE_ANALYZING){
+            session.setProcess(50);
+        }
+        if (newStatus == EtlSessionStatus.AI_ETL_ANALYZING){
+            session.setProcess(0);
+        }
     }
 }

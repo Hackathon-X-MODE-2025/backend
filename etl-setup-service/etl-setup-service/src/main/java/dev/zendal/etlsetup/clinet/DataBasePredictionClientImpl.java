@@ -4,6 +4,7 @@ import dev.zendal.etlsetup.domain.source.DataBasePrediction;
 import dev.zendal.etlsetup.dto.databaseprediction.RecommendRequest;
 import dev.zendal.etlsetup.dto.databaseprediction.RecommendationRawResponse;
 import dev.zendal.etlsetup.mapper.databaserecomendation.DataBasePredictionMapper;
+import dev.zendal.etlsetup.service.session.SessionProcessService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -25,21 +27,23 @@ public class DataBasePredictionClientImpl implements DataBasePredictionClient {
 
     private final TranslatorClient translatorClient;
 
+    private final SessionProcessService sessionProcessService;
+
     @Override
-    public DataBasePrediction predict(RecommendRequest recommendRequest) {
+    public DataBasePrediction predict(UUID id, RecommendRequest recommendRequest) {
         return this.dataBasePredictionWebClient.post()
                 .uri(uriBuilder -> uriBuilder.path("/recommend-database").build())
                 .bodyValue(recommendRequest)
                 .retrieve()
                 .bodyToMono(RecommendationRawResponse.class)
-                .flatMap(this::translate)
+                .flatMap(v -> this.translate(id, v))
                 .map(this.dataBasePredictionMapper::from)
                 .block();
     }
 
-    private Mono<RecommendationRawResponse> translate(RecommendationRawResponse recommendationRawResponse) {
+    private Mono<RecommendationRawResponse> translate(UUID sessionId, RecommendationRawResponse recommendationRawResponse) {
         List<Mono<Void>> translations = new ArrayList<>();
-
+        this.sessionProcessService.set(sessionId, 75);
         for (RecommendationRawResponse.RecommendedDatabase recommendedDatabase : recommendationRawResponse.getRecommendedDatabases()) {
             translations.add(
                     this.translate(recommendedDatabase::setReason, recommendedDatabase::getReason)

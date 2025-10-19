@@ -16,6 +16,8 @@ public interface EtlSessionMapper {
     EtlSessionShortDto toShort(EtlSessionEntity etlSessionEntity);
 
 
+    @Mapping(target = "process", ignore = true)
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "airflowId", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)

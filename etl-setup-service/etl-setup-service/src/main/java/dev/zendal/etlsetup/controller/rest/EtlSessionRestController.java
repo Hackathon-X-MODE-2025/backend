@@ -41,13 +41,19 @@ public class EtlSessionRestController {
     }
 
     @GetMapping
-    public PagedModel<EtlSessionShortDto> get(Pageable pageable) {
-        return this.etlSessionFindService.findAll(pageable);
+    public PagedModel<EtlSessionShortDto> get(
+            @RequestHeader(name = "X-User-ID") UUID userId,
+            Pageable pageable
+    ) {
+        return this.etlSessionFindService.findAll(userId, pageable);
     }
 
     @GetMapping("/{id}")
-    public EtlSessionDto getById(@PathVariable UUID id) {
-        return this.etlSessionFindService.findById(id);
+    public EtlSessionDto getById(
+            @RequestHeader(name = "X-User-ID") UUID userId,
+            @PathVariable UUID id
+    ) {
+        return this.etlSessionFindService.findById(userId, id);
     }
 
     @Operation(

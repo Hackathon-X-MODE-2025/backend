@@ -1,6 +1,7 @@
 package dev.zendal.etlsetup.service.chat;
 
 import dev.zendal.etlsetup.domain.EtlSessionStatus;
+import dev.zendal.etlsetup.dto.chat.EtlSessionChatDto;
 import dev.zendal.etlsetup.dto.request.EtlSessionChatPatchRequest;
 import dev.zendal.etlsetup.mapper.EtlSessionChatMapper;
 import dev.zendal.etlsetup.service.codegenerator.CodeGeneratorService;
@@ -24,7 +25,7 @@ public class EtlSessionPatchServiceImpl implements EtlSessionPatchService {
 
     @Override
     @Transactional
-    public void edit(UUID sessionId, EtlSessionChatPatchRequest dto) {
+    public EtlSessionChatDto edit(UUID sessionId, EtlSessionChatPatchRequest dto) {
         final var chat = this.etlSessionChatFindService.getLast(sessionId);
 
         log.info("Patching chat {} for session {}", chat.getId(), sessionId);
@@ -42,5 +43,7 @@ public class EtlSessionPatchServiceImpl implements EtlSessionPatchService {
         if (dto.getDag() != null) {
             chat.setDag(dto.getDag());
         }
+
+        return this.etlSessionChatMapper.toDto(chat);
     }
 }

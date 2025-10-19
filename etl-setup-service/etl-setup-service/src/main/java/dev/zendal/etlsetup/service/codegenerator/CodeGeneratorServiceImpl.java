@@ -28,7 +28,7 @@ public class CodeGeneratorServiceImpl implements CodeGeneratorService {
 
     @Override
     public CodeGeneratorResponse create(EtlSessionEntity etlSessionEntity) {
-        return this.codeGeneratorClient.generateCode(this.generateRequest(etlSessionEntity));
+        return this.codeGeneratorClient.generateCode(etlSessionEntity.getId(),this.generateRequest(etlSessionEntity));
 
     }
 
